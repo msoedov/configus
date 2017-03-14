@@ -26,6 +26,7 @@ def maybe_get_argv(argv=()):
     vars = {}
     argv = argv or sys.argv[1:]
     for arg in argv:
+        # todo: make more posix compliant argv parsing
         parts = arg.split('=')
         if len(parts) != 2:
             continue
