@@ -41,7 +41,7 @@ def maybe_get_argv(argv=()):
 
 def maybe_read_envfile(file_name):
     if not os.path.exists(file_name):
-        if file_name == DefaultEnvFile:
+        if file_name == DefaultEnvFile or not file_name:
             return {}
         raise EnvironmentError('Passed envfile does not exists {}'.format(file_name))
 
