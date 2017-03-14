@@ -12,13 +12,14 @@ def config(schema, env=None, ignore_extra=True, config_file='.env'):
         schema = schema.ignore_extra('*')
 
     envfile = maybe_read_envfile(config_file)
-    envfile.update(**env)
-    env = envfile
+
+    _env = envfile.copy()
+    _env.update(**env)
 
     agrs_env = maybe_get_argv()
-    env.update(**agrs_env)
+    _env.update(**agrs_env)
 
-    return schema.check(env)
+    return schema.check(_env)
 
 
 def maybe_get_argv(argv=()):
