@@ -3,7 +3,10 @@ import sys
 import trafaret
 
 
-def config(schema, env=None, ignore_extra=True, config_file='.env'):
+DefaultEnvFile = '.env'
+
+
+def config(schema, env=None, ignore_extra=True, config_file=DefaultEnvFile):
 
     assert isinstance(schema, trafaret.Trafaret), "Unexpected schema"
 
@@ -37,4 +40,30 @@ def maybe_get_argv(argv=()):
 
 
 def maybe_read_envfile(file_name):
-    return {}
+    if not os.path.exists(file_name):
+        if file_name == DefaultEnvFile:
+            return {}
+        raise EnvironmentError('Passed envfile does not exists {}'.format(file_name))
+
+    with open(file_name, 'r') as efile:
+        content = efile.readlines()
+    return parse_envfile(content)
+
+
+def parse_envfile(lines):
+    vars = {}
+    for expression in lines:
+        expression = expression.strip('\t\n ')
+        if not expression:
+            continue
+        if expression.startswith('export'):
+            expression = expression[6:]
+
+        parts = expression.split('=')
+        if len(parts) != 2:
+            continue
+        key, val = parts[0].strip(), parts[1].strip()
+        if not key:
+            continue
+        vars[key] = val
+    return vars
