@@ -13,10 +13,11 @@ Support override params from command line or env file.
 setup(
     name="configus",
     version="0.1.0",
-    description="Configus - validate your env variable configuration",
+    description="Configus - declarative spec for configuration",
     license="MIT",
     author="Alex Myasoedov",
-    packages=find_packages(),
+    author_email="msoedov@gmail.com",
+    packages=['configus'],
     install_requires=['trafaret'],
     long_description=long_description,
     classifiers=[
