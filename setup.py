@@ -2,18 +2,15 @@
 from setuptools import setup, find_packages
 
 try:
-    long_description = open("README.rst").read()
+    long_description = open("README.md").read()
 except IOError:
     long_description = """
-A unified way how to describe a spec of environment paramaters
-required for the application runtime.
-Support override params from command line or env file.
 """
 
 setup(
     name="configus",
-    version="0.1.0",
-    description="Configus - declarative spec for configuration",
+    version="0.1.1",
+    description="Configus - a declarative spec for configuration",
     license="MIT",
     author="Alex Myasoedov",
     author_email="msoedov@gmail.com",
