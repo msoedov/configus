@@ -1,12 +1,23 @@
 import os
 import sys
-import trafaret
 
+import trafaret
 
 DefaultEnvFile = '.env'
 
 
 def config(schema, env=None, ignore_extra=True, config_file=DefaultEnvFile):
+    """
+    Verifies env data by passed schema.
+
+    Args:
+        schema: trafaret schema
+        env: dictionary like object or None (os.environ will be used)
+        ignore_extra: ignore extra parameters in env
+        config_file: envfile path
+    Returns:
+        verified data
+    """
 
     assert isinstance(schema, trafaret.Trafaret), "Unexpected schema"
 
@@ -23,6 +34,14 @@ def config(schema, env=None, ignore_extra=True, config_file=DefaultEnvFile):
     _env.update(**agrs_env)
 
     return schema.check(_env)
+
+
+def config_with_error(schema, env=None, ignore_extra=True, **opt):
+    try:
+        data = config(schema, env=None, ignore_extra=True, **opt)
+    except trafaret.DataError as e:
+        return None, e
+    return data, None
 
 
 def maybe_get_argv(argv=()):

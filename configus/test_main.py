@@ -1,12 +1,15 @@
 import trafaret as t
 
-from .configus import config, maybe_get_argv, parse_envfile
+from .configus import config, config_with_error, maybe_get_argv, parse_envfile
 
 
 def test_basic():
     env = {'var': 'hallo', 'another_var': 'holla'}
     expected = {'var': 'hallo'}
     assert config(t.Dict(var=t.String), env) == expected
+    data, err = config_with_error(t.Dict(var=t.String), dict(var=1))
+    assert data is None
+    assert isinstance(err, t.DataError)
 
 
 def test_argv():
@@ -15,12 +18,12 @@ def test_argv():
 
 def test_envfile():
     contents = [
-    "One=one   ",
-    "\texport Two=two\n\n\n \n",
-    "\n\n\n \n",
-    "None \n\n\n \n",
-    "=",
-    ]
+                "One=one   ",
+                "\texport Two=two\n\n\n \n",
+                "\n\n\n \n",
+                "None \n\n\n \n",
+                "=",
+                ]
 
     expected = [
         {'One': 'one'},
@@ -30,4 +33,4 @@ def test_envfile():
         {},
     ]
     for given, expected in zip(contents, expected):
-        assert parse_envfile([given]) ==  expected
+        assert parse_envfile([given]) == expected
