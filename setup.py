@@ -9,7 +9,7 @@ except IOError:
 
 setup(
     name="configus",
-    version="0.1.2",
+    version="0.1.3",
     description="Configus - a declarative spec for configuration",
     license="MIT",
     author="Alex Myasoedov",
