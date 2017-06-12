@@ -1,5 +1,6 @@
 import os
 import sys
+import warnings
 
 import trafaret
 
@@ -20,7 +21,11 @@ def config(schema, env=None, ignore_extra=True, config_file=DefaultEnvFile):
     """
 
     assert isinstance(schema, trafaret.Trafaret), "Unexpected schema"
-
+    all_upper = False
+    if isinstance(schema, trafaret.Dict):
+        keys = schema.keys
+        names = [k.get_name() for k in keys]
+        all_upper = all(map(lambda s: s.isupper(), names))
     env = env or os.environ.copy()
     if ignore_extra:
         schema = schema.ignore_extra('*')
@@ -29,10 +34,14 @@ def config(schema, env=None, ignore_extra=True, config_file=DefaultEnvFile):
 
     _env = envfile.copy()
     _env.update(**env)
-
     agrs_env = maybe_get_argv()
     _env.update(**agrs_env)
+    duplicates = _check_dup_keys(hs_map=_env)
 
+    if duplicates:
+        warnings.warn('Duplicate keys in different case found! {}'.format(duplicates))
+    if not all_upper:
+        _env = {k.lower(): v for k, v in _env.items()}
     return schema.check(_env)
 
 
@@ -86,3 +95,11 @@ def parse_envfile(lines):
             continue
         vars[key] = val
     return vars
+
+
+def _check_dup_keys(hs_map):
+    dups = []
+    for k in hs_map:
+        if k.upper() in hs_map:
+            dups.append((k, k.upper()))
+    return dups

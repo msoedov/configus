@@ -12,6 +12,16 @@ def test_basic():
     assert isinstance(err, t.DataError)
 
 
+def test_warn():
+    env = {'VAR': 'hallo'}
+    expected = {'var': 'hallo'}
+    assert config(t.Dict(var=t.String), env) == expected
+
+    env = {'VAR': 'hallo'}
+    expected = {'VAR': 'hallo'}
+    assert config(t.Dict(VAR=t.String), env) == expected
+
+
 def test_argv():
     assert maybe_get_argv(['--rate=1', '--backoff=2', 'debug=1']) == {'backoff': '2', 'debug': '1', 'rate': '1'}
 
