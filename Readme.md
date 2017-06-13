@@ -26,7 +26,7 @@ Let start with a simple spec that our requires `debug`, `version` and `secret_co
 from configus import config, trafaret as t
 
 if __name__ == '__main__':
-    # describes shape of the data params which will be taken either from env, cli args or envfile.
+    # Describes shape of the data params which will be taken either from env, cli args or envfile.
     schema = t.Dict(DEBUG=t.StrBool, VERSION=t.Float, SECRET_COOKIE=t.String)
     env_vars = config(schema=schema)
     assert env_vars == {'DEBUG': True, VERSION: 0.1, SECRET_COOKIE=<......>}
