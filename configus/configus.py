@@ -100,6 +100,6 @@ def parse_envfile(lines):
 def _check_dup_keys(hs_map):
     dups = []
     for k in hs_map:
-        if k.upper() in hs_map:
+        if k.islower() and k.upper() in hs_map:
             dups.append((k, k.upper()))
     return dups

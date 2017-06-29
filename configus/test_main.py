@@ -13,7 +13,7 @@ def test_basic():
 
 
 def test_warn():
-    env = {'VAR': 'hallo'}
+    env = {'VAR': 'hallo', 'var': 'hallo'}
     expected = {'var': 'hallo'}
     assert config(t.Dict(var=t.String), env) == expected
 
@@ -23,7 +23,8 @@ def test_warn():
 
 
 def test_argv():
-    assert maybe_get_argv(['--rate=1', '--backoff=2', 'debug=1']) == {'backoff': '2', 'debug': '1', 'rate': '1'}
+    assert maybe_get_argv(['--rate=1', '--backoff=2', 'debug=1']) == \
+            {'backoff': '2', 'debug': '1', 'rate': '1'}
 
 
 def test_envfile():
